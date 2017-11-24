@@ -5,7 +5,7 @@ import com.aikon.wht.model.ArticleCommentedModel;
 /**
  * @author haitao.wang
  */
-public class ArticleCommentedEvent extends NoticeEvent<ArticleCommentedModel> {
+public class ArticleCommentedEvent extends AbstractNoticeEvent<ArticleCommentedModel> {
     public ArticleCommentedEvent(ArticleCommentedModel articleCommentedModel) {
         super(articleCommentedModel);
     }

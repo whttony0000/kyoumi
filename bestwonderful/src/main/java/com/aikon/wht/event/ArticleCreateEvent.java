@@ -5,7 +5,7 @@ import com.aikon.wht.model.ArticleCreateEventModel;
 /**
  * @author haitao.wang
  */
-public class ArticleCreateEvent extends NoticeEvent<ArticleCreateEventModel> {
+public class ArticleCreateEvent extends AbstractNoticeEvent<ArticleCreateEventModel> {
 
     public ArticleCreateEvent(ArticleCreateEventModel eventModel) {
         super(eventModel);

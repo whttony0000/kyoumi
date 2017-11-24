@@ -22,7 +22,7 @@ public class NoticeCaller implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
-    public void publishEvent(EventModel eventModel,Class<? extends NoticeEvent> clazz) {
+    public void publishEvent(EventModel eventModel,Class<? extends AbstractNoticeEvent> clazz) {
         Constructor constructor;
         try {
             constructor = clazz.getConstructor(eventModel.getClass());
@@ -30,9 +30,9 @@ public class NoticeCaller implements ApplicationContextAware {
             log.info("Error Publish Event {}",e);
             return;
         }
-        NoticeEvent event;
+        AbstractNoticeEvent event;
         try {
-            event = (NoticeEvent) constructor.newInstance(eventModel);
+            event = (AbstractNoticeEvent) constructor.newInstance(eventModel);
         } catch (InstantiationException e) {
             log.info("Error Publish Event {}",e);
             return;

@@ -135,7 +135,7 @@
 
     <!-- notice -->
     <bean id="noticeCaller" class="com.aikon.wht.event.NoticeCaller"/>
-    <bean id="noticeListener" class="com.aikon.wht.event.NoticeListener" abstract="true"/>
+    <bean id="abstractNoticeListener" class="com.aikon.wht.event.AbstractNoticeListener" abstract="true"/>
     <bean id="articleCreateListener" class="com.aikon.wht.event.ArticleCreateListener"/>
 
 </beans>

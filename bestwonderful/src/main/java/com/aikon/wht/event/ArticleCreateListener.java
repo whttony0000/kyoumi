@@ -1,6 +1,5 @@
 package com.aikon.wht.event;
 
-import com.aikon.wht.dao.extend.NoticeExtendMapper;
 import com.aikon.wht.entity.Individual;
 import com.aikon.wht.entity.Notice;
 import com.aikon.wht.enums.NoticeTypeEnum;
@@ -21,7 +20,7 @@ import java.util.List;
 /**
  * @author haitao.wang
  */
-public class ArticleCreateListener extends NoticeListener<ArticleCreateEvent> implements ApplicationListener<ArticleCreateEvent> {
+public class ArticleCreateListener extends AbstractNoticeListener<ArticleCreateEvent> implements ApplicationListener<ArticleCreateEvent> {
 
     @Autowired
     ArticleService articleService;

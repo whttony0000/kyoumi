@@ -6,9 +6,9 @@ import org.springframework.context.ApplicationEvent;
 /**
  * @author haitao.wang
  */
-public class NoticeEvent<T extends EventModel> extends ApplicationEvent {
+public abstract class AbstractNoticeEvent<T extends EventModel> extends ApplicationEvent {
 
-    public NoticeEvent(T t) {
+    public AbstractNoticeEvent(T t) {
         super(t);
     }
 }

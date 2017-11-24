@@ -3,7 +3,7 @@ package com.aikon.wht.event;
 /**
  * @author haitao.wang
  */
-public abstract class NoticeListener<T extends NoticeEvent>  {
+public abstract class AbstractNoticeListener<T extends AbstractNoticeEvent>  {
 
     /**
      * 事件流程.
