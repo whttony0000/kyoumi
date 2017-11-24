@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--properties-->
+    <context:property-placeholder
+            location="classpath:other.properties,classpath:log4j.properties,classpath:mongo.properties,classpath:jdbc.properties"/>
+    <context:annotation-config></context:annotation-config>
+
+    <!--component scan-->
+    <context:component-scan base-package="com.aikon.wht">
+        <context:exclude-filter type="regex" expression="com.aikon.wht.model"></context:exclude-filter>
+    </context:component-scan>
+
+
+    <!--freemarker-->
+    <bean id="viewResolverFtl"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <!-- <property name="viewClass" value="com.base.view.ExFreeMarkerView"
+            /> -->
+        <property name="contentType" value="text/html; charset=UTF-8"/>
+        <property name="cache" value="true"/>
+        <property name="suffix" value=".ftl"/>
+        <property name="order" value="0"/>
+        <property name="requestContextAttribute" value="request"/>
+    </bean>
+
+    <bean id="freemarkerConfig"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath">
+            <value>/WEB-INF/pages/</value>
+        </property>
+        <property name="defaultEncoding">
+            <value>UTF-8</value>
+        </property>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="defaultEncoding">UTF-8</prop>
+                <prop key="template_update_delay">10</prop>
+                <prop key="classic_compatible">true</prop>
+                <prop key="template_exception_handler">ignore</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--Inject bean-->
+    <bean id="singleMongoDatabase" class="com.aikon.wht.mongo.config.MongoDatabaseFactoryBean">
+        <constructor-arg name="host" value="${mongo.host}"/>
+        <constructor-arg name="port" value="${mongo.port}"/>
+        <constructor-arg name="userName" value="${mongo.userName}"/>
+        <constructor-arg name="password" value="${mongo.password}"/>
+        <constructor-arg name="databaseName" value="${mongo.databaseName}"/>
+        <constructor-arg name="collectionName" value="${mongo.collectionName}"/>
+        <constructor-arg name="connectionsPerHost" value="${mongo.connectionsPerHost}"/>
+        <constructor-arg name="threadsAllowedToBlockForConnectionMultiplier"
+                         value="${mongo.threadsAllowedToBlockForConnectionMultiplier}"/>
+        <constructor-arg name="maxWaitTime" value="${mongo.maxWaitTime}"/>
+    </bean>
+
+    <!-- spring thread pool -->
+    <bean id="threadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
+          scope="singleton">
+        <property name="corePoolSize" value="5"/>
+        <property name="keepAliveSeconds" value="1000"/>
+        <property name="maxPoolSize" value="50"/>
+        <property name="queueCapacity" value="100"/>
+    </bean>
+
+    <!-- scheduler -->
+    <task:annotation-driven executor="threadPoolTaskExecutor" proxy-target-class="true"/>
+
+
+    <bean id="httpClientFactory"
+          class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+        <property name="connectTimeout" value="1000"/>
+        <property name="readTimeout" value="1000"/>
+    </bean>
+
+    <!--RestTemplate -->
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <constructor-arg ref="httpClientFactory"/>
+    </bean>
+
+    <!--file upload-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="maxInMemorySize" value="30000000"></property>
+        <property name="maxUploadSize" value="2000000000"></property>
+    </bean>
+
+    <!-- mailer -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host">
+            <value>smtp.163.com</value>
+        </property>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.timeout">25000</prop>
+            </props>
+        </property>
+        <property name="username">
+            <value>${sendMailFrom}</value>
+        </property>
+        <property name="password">
+            <value>${sendMailFromPasswd}</value>
+        </property>
+    </bean>
+
+    <!-- Kaptcha -->
+    <bean name="producer" class="com.google.code.kaptcha.impl.DefaultKaptcha" scope="singleton">
+        <property name="config">
+            <bean class="com.google.code.kaptcha.util.Config">
+                <constructor-arg>
+                    <props>
+                        <prop key="kaptcha.border">no</prop>
+                        <prop key="kaptcha.textproducer.font.color">black</prop>
+                        <prop key="kaptcha.textproducer.char.space">5</prop>
+                    </props>
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- rateLimiter -->
+    <bean id="mailRateLimiter" class="com.google.common.util.concurrent.RateLimiter" factory-method="create">
+        <constructor-arg type="double" value="${mailRate}"/>
+    </bean>
+
+    <!-- notice -->
+    <bean id="noticeCaller" class="com.aikon.wht.event.NoticeCaller"/>
+    <bean id="noticeListener" class="com.aikon.wht.event.NoticeListener" abstract="true"/>
+    <bean id="articleCreateListener" class="com.aikon.wht.event.ArticleCreateListener"/>
+
+</beans>

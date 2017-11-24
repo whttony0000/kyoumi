@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+            <!--<classPathEntry location="C:\Users\Administrator\.m2\repository\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar" />-->
+    <classPathEntry location="D:\Program Files\apache-maven-3.0.5\repository\mysql\mysql-connector-java\5.1.38"/>
+    <context id="main_sell" targetRuntime="MyBatis3" defaultModelType="flat">
+
+        <!-- 注释 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <!-- 是否取消注释 -->
+            <property name="suppressDate" value="true"/>
+            <!-- 是否生成注释代时间戳-->
+        </commentGenerator>
+        <!-- jdbc连接 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/kyoumi-dev" userId="userId"
+                        password="password"/>
+
+
+        <!-- 类型转换 -->
+        <javaTypeResolver>
+            <!-- 是否使用bigDecimal， false可自动转化以下类型（Long, Integer, Short, etc.） -->
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成实体类地址 -->
+        <javaModelGenerator  targetPackage="com.aikon.wht.entity"
+                            targetProject="src/main/java">
+            <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
+            <property name="enableSubPackages" value="true"/>
+            <!-- 是否针对string类型的字段在set的时候进行trim调用 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        
+        <!-- 生成mapxml文件 -->
+        <sqlMapGenerator  targetPackage="dao"
+                         targetProject="src/main/resources">
+            <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 生成mapxml对应client，也就是接口dao -->
+        <javaClientGenerator targetPackage="com.aikon.wht.dao"
+                             targetProject="src/main/java" type="XMLMAPPER">
+            <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--<table tableName="kyoumi_category" domainObjectName="Category">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+            <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+
+        <!--<table tableName="kyoumi_article" domainObjectName="Article">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+            <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+            <!--<columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="kyoumi_individual" domainObjectName="Individual">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+            <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+            <!--<columnOverride column="sex" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+        <!--<table tableName="kyoumi_photo" domainObjectName="Photo">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+            <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+            <!--<columnOverride column="type" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+        <!--<table tableName="kyoumi_tag" domainObjectName="Tag">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+            <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+
+        <!--<table tableName="kyoumi_mid_individual_category" domainObjectName="MidIndividualCategory">-->
+        <!--<property name="useActualColumnNames" value="true" />-->
+        <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+
+        <!--<table tableName="kyoumi_article_like" domainObjectName="ArticleLike">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+            <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+
+        <!--<table tableName="kyoumi_mid_individual_individual" domainObjectName="MidIndividualIndividual">-->
+        <!--<property name="useActualColumnNames" value="true" />-->
+        <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+
+        <!--<table tableName="kyoumi_article_bookmark" domainObjectName="ArticleBookmark">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+            <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+
+        <!--<table tableName="kyoumi_comment" domainObjectName="Comment">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+            <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+
+        <!--<table tableName="kyoumi_sub_comment" domainObjectName="SubComment">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+            <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+
+
+        <!--<table tableName="kyoumi_role_perm" domainObjectName="RolePerm">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+        <!--</table>-->
+
+        <!--<table tableName="kyoumi_individual_log" domainObjectName="IndividualLog">-->
+            <!--<property name="useActualColumnNames" value="true" />-->
+            <!--<columnOverride column="status" javaType="java.lang.Integer" />-->
+            <!--<columnOverride column="type" javaType="java.lang.Integer" />-->
+        <!--</table>-->
+
+        <table tableName="kyoumi_notice" domainObjectName="Notice">
+            <property name="useActualColumnNames" value="true" />
+            <columnOverride column="status" javaType="java.lang.Integer" />
+            <columnOverride column="type" javaType="java.lang.Integer" />
+        </table>
+
+
+
+    </context>
+
+</generatorConfiguration>

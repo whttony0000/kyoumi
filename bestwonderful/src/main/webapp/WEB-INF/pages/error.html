@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>error | BestWonderful</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+</head>
+<style>
+    #storyContainer {
+        margin: 10% auto;
+        display: table;
+        padding: 20px;
+        box-shadow: 0 0 8px 0 rgba(0,0,0,.16);
+    }
+</style>
+<body>
+<div>
+    <div id="storyContainer">
+        Sorry,Your page is gone...The home page will show up instead in 5 seconds...
+    </div>
+</div>
+<script>
+    window.onload = function () {
+        setTimeout(()=>{
+            location.href = '/index';
+        },5000)
+    }
+</script>
+</body>
+</html>

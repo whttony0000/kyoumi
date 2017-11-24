@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--<bean id="validRequestMethodInterceptor" class="com.aikon.wht.intercepter.ValidRequestMethodInterceptor"/>-->
+
+    <!--&lt;!&ndash;aop&ndash;&gt;-->
+    <!--<aop:config proxy-target-class="true">-->
+    <!--<aop:pointcut id="validRequestPointcut"-->
+    <!--expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)"/>-->
+    <!--<aop:advisor advice-ref="validRequestMethodInterceptor" pointcut-ref="validRequestPointcut"/>-->
+    <!--</aop:config>-->
+
+    <!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
+
+    <!--<bean id="roleMethodInterceptor" class="com.aikon.wht.intercepter.RoleMethodInterceptor"/>-->
+
+    <!--&lt;!&ndash;aop&ndash;&gt;-->
+    <!--<aop:config proxy-target-class="true">-->
+        <!--<aop:pointcut id="rolePointCut"-->
+                      <!--expression="@annotation(com.aikon.wht.annotations.RoleInfo)"/>-->
+        <!--<aop:advisor advice-ref="roleMethodInterceptor" pointcut-ref="rolePointCut"/>-->
+    <!--</aop:config>-->
+
+</beans>

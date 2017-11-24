@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aikon.wht.dao.extend.IndividualLogExtendMapper" >
+
+    <select id="getLastLog" resultType="com.aikon.wht.entity.IndividualLog">
+        SELECT
+            *
+        FROM
+            kyoumi_individual_log
+        WHERE
+            individualId = #{individualId}
+        AND `status` = 1
+        AND type = #{type}
+        ORDER BY
+            id DESC
+        LIMIT 1
+    </select>
+</mapper>

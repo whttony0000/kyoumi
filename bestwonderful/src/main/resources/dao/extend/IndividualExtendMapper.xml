@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aikon.wht.dao.extend.IndividualExtendMapper" >
+  <insert id="insertSelectiveExt" parameterType="com.aikon.wht.entity.Individual">
+    <selectKey keyProperty="id" resultType="int" order="AFTER">
+      SELECT LAST_INSERT_ID();
+    </selectKey>
+    insert into kyoumi_individual
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="creatorId != null" >
+        creatorId,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="mail != null" >
+        mail,
+      </if>
+      <if test="passwd != null" >
+        passwd,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="mailMd5Hash != null" >
+        mailMd5Hash,
+      </if>
+      <if test="photoKey != null" >
+        photoKey,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="role != null" >
+        role,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null" >
+        #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null" >
+        #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="mailMd5Hash != null" >
+        #{mailMd5Hash,jdbcType=VARCHAR},
+      </if>
+      <if test="photoKey != null" >
+        #{photoKey,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="role != null" >
+        #{role,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+    <select id="getOnWatchIndividualList" resultType="com.aikon.wht.entity.Individual">
+      SELECT
+        i.*
+      FROM
+          kyoumi_individual i
+      JOIN kyoumi_mid_individual_individual m ON i.id = m.watchedId
+      AND i.`status` = 1
+      AND m.`status` = 1
+      WHERE
+          m.watcherId = #{watcherId}
+      ORDER BY
+          m.updateTime DESC
+      LIMIT #{offset},#{limit}
+    </select>
+  <select id="getFanList" resultType="com.aikon.wht.entity.Individual">
+      SELECT
+        i.*
+      FROM
+          kyoumi_individual i
+      JOIN kyoumi_mid_individual_individual m ON i.id = m.watcherId
+      AND i.`status` = 1
+      AND m.`status` = 1
+      WHERE
+          m.watchedId = #{watchedId}
+      ORDER BY
+          m.updateTime DESC
+      LIMIT #{offset},#{limit}
+  </select>
+    <select id="getFanDetails" resultType="com.aikon.wht.entity.Individual">
+      SELECT
+          ki.*
+      FROM
+          kyoumi_mid_individual_individual kmii
+      LEFT JOIN kyoumi_individual ki ON kmii.watcherId = ki.id
+      AND kmii.`status` = 1
+      AND ki.`status` = 1
+      WHERE
+          watchedId = #{individualId}
+
+    </select>
+</mapper>

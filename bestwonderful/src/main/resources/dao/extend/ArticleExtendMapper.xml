@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aikon.wht.dao.extend.ArticleExtendMapper" >
+  <insert id="insertSelectiveExt" parameterType="com.aikon.wht.entity.Article" >
+    <selectKey keyProperty="id" resultType="int" order="AFTER">
+      SELECT LAST_INSERT_ID();
+    </selectKey>
+    insert into kyoumi_article
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="creatorId != null" >
+        creatorId,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="categoryId != null" >
+        categoryId,
+      </if>
+      <if test="tagId != null" >
+        tagId,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="likeCnt != null" >
+        likeCnt,
+      </if>
+        <if test="bookmarkCnt != null" >
+          bookmarkCnt,
+        </if>
+        <if test="shareCnt != null" >
+            shareCnt,
+        </if>
+        <if test="commentCnt != null" >
+            commentCnt,
+        </if>
+        <if test="readCnt != null" >
+            readCnt,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="tagId != null" >
+        #{tagId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="likeCnt != null" >
+        #{likeCnt,jdbcType=INTEGER},
+      </if>
+        <if test="bookmarkCnt != null" >
+            #{bookmarkCnt,jdbcType=INTEGER},
+        </if>
+        <if test="shareCnt != null" >
+            #{shareCnt,jdbcType=INTEGER},
+        </if>
+        <if test="commentCnt != null" >
+            #{commentCnt,jdbcType=INTEGER},
+        </if>
+        <if test="readCnt != null" >
+            #{readCnt,jdbcType=INTEGER},
+        </if>
+    </trim>
+  </insert>
+  <select id="getArticleList" resultType="com.aikon.wht.model.ArticleModel">
+    SELECT
+    a.title,
+    a.memo,
+    a.id articleId,
+    c.id categoryId,
+    c.`name` categoryName,
+    i.id individualId,
+    i.`name` individualName,
+    i.score individualScore,
+    DATE_FORMAT(a.createTime,'%Y/%m/%d') createTime,
+    i.photoKey individualPhotoKey,
+    i.mailMd5Hash individualMailCode,
+    a.likeCnt articleLikeCnt,
+    a.bookmarkCnt articleBookmarkCnt,
+    a.commentCnt articleCommentCnt
+    FROM
+    kyoumi_article a
+    LEFT JOIN kyoumi_category c ON a.categoryId = c.id and c.status = 1
+    LEFT JOIN kyoumi_individual i ON a.creatorId = i.id and i.status = 1
+    WHERE
+    a.`status` = 1
+    <if test="categoryId != null and categoryId != 0" >
+      AND a.categoryId = #{categoryId}
+    </if>
+    <if test="individualId != null and individualId != 0" >
+      AND a.creatorId = #{individualId}
+    </if>
+    order by a.id desc
+    limit #{offset},#{limit}
+  </select>
+  <select id="getArticleDetail" resultType="com.aikon.wht.model.ArticleModel">
+    SELECT
+    a.title,
+    a.content,
+    a.id articleId,
+    c.id categoryId,
+    c.`name` categoryName,
+    i.id individualId,
+    i.`name` individualName,
+    DATE_FORMAT(a.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+    a.likeCnt articleLikeCnt,
+    a.bookmarkCnt articleBookmarkCnt,
+    a.readCnt articleReadCnt,
+    a.memo memo,
+    i.photoKey individualPhotoKey,
+    i.mailMd5Hash individualMailCode
+    FROM
+    kyoumi_article a
+    LEFT JOIN kyoumi_category c ON a.categoryId = c.id and c.status = 1
+    LEFT JOIN kyoumi_individual i ON a.creatorId = i.id and i.status = 1
+    WHERE
+    a.`status` = 1 and a.id = #{articleId}
+  </select>
+  <select id="getHotArticleList" resultType="com.aikon.wht.model.ArticleModel">
+    SELECT
+    a.title,
+    a.memo,
+    a.id articleId,
+    c.id categoryId,
+    c.`name` categoryName,
+    i.id individualId,
+    i.`name` individualName,
+    i.score individualScore,
+    a.likeCnt articleLikeCnt
+    FROM
+    kyoumi_article a
+    LEFT JOIN kyoumi_category c ON a.categoryId = c.id and c.status = 1
+    LEFT JOIN kyoumi_individual i ON a.creatorId = i.id and i.status = 1
+    WHERE
+    a.`status` = 1
+    <if test="categoryIds!= null">
+      and a.categoryId in
+      <foreach collection="categoryIds" item="item" open="(" close=")" separator="," >
+        #{item}
+      </foreach>
+    </if>
+    order by a.likeCnt desc, a.id desc
+  </select>
+  <select id="countArticleList" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+    kyoumi_article a
+    LEFT JOIN kyoumi_category c ON a.categoryId = c.id and c.status = 1
+    LEFT JOIN kyoumi_individual i ON a.creatorId = i.id and i.status = 1
+    WHERE
+    a.`status` = 1
+    <if test="categoryId != null and categoryId != 0" >
+      AND a.categoryId = #{categoryId}
+    </if>
+    <if test="individualId != null and individualId != 0" >
+      AND a.creatorId = #{individualId}
+    </if>
+  </select>
+    <select id="getIndividualBookmarkList" resultType="com.aikon.wht.model.ArticleModel">
+      SELECT
+       a.title,
+      a.memo,
+      a.id articleId,
+      c.id categoryId,
+      c.`name` categoryName,
+      i.id individualId,
+      i.`name` individualName,
+      i.score individualScore,
+      DATE_FORMAT(a.createTime,'%Y/%m/%d') createTime,
+      i.photoKey individualPhotoKey,
+      i.mailMd5Hash individualMailCode
+       from
+      kyoumi_article a
+      join kyoumi_article_bookmark m
+      on a.id = m.articleId and a.`status` = 1 and m.`status` = 1
+      LEFT JOIN kyoumi_category c ON a.categoryId = c.id and c.status = 1
+      LEFT JOIN kyoumi_individual i ON a.creatorId = i.id and i.status = 1
+      where m.individualId = #{individualId}
+      order by m.updateTime desc
+      limit #{offset},#{limit}
+    </select>
+</mapper>

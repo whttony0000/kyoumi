@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aikon.wht.dao.extend.MidIndividualCategoryExtendMapper" >
+  <insert id="upsert" parameterType="com.aikon.wht.entity.MidIndividualCategory">
+    insert into kyoumi_mid_individual_category (creatorId,memo,status,individualId,categoryId)
+    values (#{midIndividualCategory.creatorId},#{midIndividualCategory.memo},#{midIndividualCategory.status},#{midIndividualCategory.individualId},#{midIndividualCategory.categoryId})
+    ON DUPLICATE KEY UPDATE
+    creatorId = #{midIndividualCategory.creatorId},
+    memo = #{midIndividualCategory.memo},
+    status = #{midIndividualCategory.status},
+    individualId = #{midIndividualCategory.individualId},
+    categoryId = #{midIndividualCategory.categoryId}
+  </insert>
+</mapper>

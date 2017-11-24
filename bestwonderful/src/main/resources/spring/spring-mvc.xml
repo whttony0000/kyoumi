@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+
+    <!--annotation-->
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean class="com.aikon.wht.intercepter.IndividualArgumentResolver"></bean>
+        </mvc:argument-resolvers>
+        <mvc:return-value-handlers>
+            <bean class="com.aikon.wht.intercepter.ReturnResolver"></bean>
+        </mvc:return-value-handlers>
+    </mvc:annotation-driven>
+
+    <!--static-->
+    <mvc:default-servlet-handler/>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/resources/**"/>
+            <mvc:exclude-mapping path="/isLive"/>
+            <bean class="com.aikon.wht.intercepter.RequestInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+
+</beans>

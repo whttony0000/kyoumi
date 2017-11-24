@@ -1,0 +1,137 @@
+.comment {
+    padding:20px 0 30px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.comment-author {
+    margin-bottom: 15px;
+}
+
+.comment-avatar {
+    margin-right: 5px;
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.comment-avatar img {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ddd;
+    /*border-radius: 50%;*/
+    vertical-align: middle;
+}
+
+.c-a-info {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.c-a-meta {
+    font-size: 12px;
+    color: #969696;
+}
+
+.comment-wrap {
+
+}
+
+.c-w-p {
+    font-size: 16px;
+    margin: 10px 0;
+    line-height: 1.5;
+    word-break: break-all;
+}
+
+.sub-comment {
+    margin-top: 20px;
+    padding: 5px 0 5px 20px;
+    border-left: 2px solid #d9d9d9;
+}
+
+.s-c-wrapper {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #f0f0f0;
+}
+
+.s-c-wrapper p {
+    margin: 0 0 5px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-all;
+}
+
+.s-c-b-group {
+    font-size: 12px;
+    color: #969696;
+}
+
+.s-c-b-group a span {
+    vertical-align: middle;
+}
+
+.more-comment {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 14px;
+    color: #969696;
+}
+
+.add-comment-btn {
+    color: #969696 !important;
+}
+
+.new-comment {
+    padding: 20px 0 10px 20px;
+    border-left: 2px solid #d9d9d9;
+}
+
+.add-comment-btn {
+    cursor: pointer;
+}
+
+.c-b-group {
+    padding: 4px;
+}
+
+.n-c-t-span {
+    font-size: 14px;
+    color: #a7a7a7;
+    margin: 0 0 5px 5px;
+    display: block;
+}
+
+.s-c-target-a {
+    margin-right: 3px;
+}
+
+.new-comment-box {
+    padding: 20px 0 10px 0;
+}
+
+.c-b-b-group {
+    padding: 4px;
+    text-align: right;
+}
+
+.c-b-span {
+    font-size: 14px;
+    margin: 0 0 10px 5px;
+    display: block;
+    font-weight: bold;
+}
+
+.comment-wrapper {
+    padding: 50px 100px 0 10px;
+}
+
+.comment-total-div {
+    font-weight: bolder;
+    font-size: 16px;
+    border-bottom: 1px solid #ccc;
+    padding: 0 0 5px 5px;
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aikon.wht.dao.extend.ArticleBookmarkExtendMapper" >
+  <insert id="upsert" parameterType="com.aikon.wht.entity.ArticleBookmark">
+    insert into kyoumi_article_bookmark (creatorId,memo,status,individualId,articleId)
+    values (#{articleBookmark.creatorId},#{articleBookmark.memo},#{articleBookmark.status},#{articleBookmark.individualId},#{articleBookmark.articleId})
+    ON DUPLICATE KEY UPDATE
+    creatorId = #{articleBookmark.creatorId},
+    memo = #{articleBookmark.memo},
+    status = #{articleBookmark.status},
+    individualId = #{articleBookmark.individualId},
+    articleId = #{articleBookmark.articleId}
+  </insert>
+</mapper>

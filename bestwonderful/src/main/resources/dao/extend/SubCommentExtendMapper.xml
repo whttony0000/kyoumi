@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aikon.wht.dao.extend.SubCommentExtendMapper" >
+
+    <insert id="insertSelectiveExt" parameterType="com.aikon.wht.entity.SubComment" >
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+        insert into kyoumi_sub_comment
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="createTime != null" >
+                createTime,
+            </if>
+            <if test="updateTime != null" >
+                updateTime,
+            </if>
+            <if test="creatorId != null" >
+                creatorId,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="commentId != null" >
+                commentId,
+            </if>
+            <if test="targetIndividualId != null" >
+                targetIndividualId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null" >
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="commentId != null" >
+                #{commentId,jdbcType=INTEGER},
+            </if>
+            <if test="targetIndividualId != null" >
+                #{targetIndividualId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getSubComments" resultType="com.aikon.wht.model.CommentModel">
+        SELECT
+            c.id id,
+            c.commentId,
+            c.creatorId individualId,
+            i.`name` individualName,
+            DATE_FORMAT(c.createTime, '%Y-%m-%d %H:%i') createTime,
+            c.content content,
+            c.targetIndividualId targetIndividualId,
+            ii.name targetIndividualName
+        FROM
+            kyoumi_sub_comment c
+        JOIN kyoumi_individual i ON c.creatorId = i.id
+        join kyoumi_individual ii on ii.id = c.targetIndividualId
+        AND i.`status` = 1
+        AND ii.`status` = 1
+        WHERE
+            c.`status` = 1
+        AND c.commentId = #{commentId}
+        order by c.id
+    </select>
+</mapper>
