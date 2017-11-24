@@ -28,7 +28,7 @@
 
 数据模块（数据模块配置与否不会影响博客模块）
 - mongoDB准备
-- 配置mongo.properties
+- 配置[mongo.properties](https://github.com/whttony0000/kyoumi/blob/master/bestwonderful/src/main/resources/conf/dev/other.properties)
 - 部分数据依赖[pythonCrawler](https://github.com/whttony0000/pythonCrawler)，所以需要配置PythonCrawler或者选择其他数据来源。
 
 
