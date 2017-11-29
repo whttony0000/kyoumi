@@ -301,10 +301,6 @@
             <groupId>org.python</groupId>
             <artifactId>jython</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.aikon</groupId>
-            <artifactId>wonderful-client</artifactId>
-        </dependency>
     </dependencies>
 
 
