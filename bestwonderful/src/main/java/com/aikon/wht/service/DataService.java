@@ -39,8 +39,8 @@ public class DataService {
 
     public List<String> getRealTimeBoxOffice() {
         BsonDocument filter = new BsonDocument();
-        String today = new DateTime().toString("yyyy-MM-dd");
-        filter.put("time", new BsonRegularExpression(today));
+//        String today = new DateTime().toString("yyyy-MM-dd");
+//        filter.put("time", new BsonRegularExpression(today));
         return this.getData(REAL_TIME_BOX_OFFICE, filter);
     }
 
