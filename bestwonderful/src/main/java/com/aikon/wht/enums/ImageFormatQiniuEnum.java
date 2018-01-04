@@ -1,9 +1,9 @@
 package com.aikon.wht.enums;
 
 /**
- * @author haitao.wang
+ * 七牛图片格式后缀enum.
  *
- *  七牛图片格式后缀.
+ * @author haitao.wang
  */
 public enum ImageFormatQiniuEnum {
     // ORIGIN

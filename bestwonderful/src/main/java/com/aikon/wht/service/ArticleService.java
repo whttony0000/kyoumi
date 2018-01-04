@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Administrator on 2017/7/15 0015.
+ * 文章服务.
+ *
+ * @author haitao.wang
  */
 @Service
 @Slf4j
@@ -65,6 +67,12 @@ public class ArticleService {
     ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
 
+    /**
+     * 获取文章.
+     *
+     * @param articleId
+     * @return Article
+     */
     public Article getArticle(Integer articleId) {
         ArticleExample example = new ArticleExample();
         example.or().andIdEqualTo(articleId).andStatusEqualTo(StatusEnum.VALID.getCode());
@@ -75,6 +83,12 @@ public class ArticleService {
         return articleList.get(0);
     }
 
+    /**
+     * 更新或新增文章 新增文章时发布新增文章事件.
+     *
+     * @param article
+     * @return Response
+     */
     public Response<String> saveArticle(Article article) {
         if (article.getId() == null || article.getId() == 0) {
             article.setStatus(StatusEnum.VALID.getCode());
@@ -104,6 +118,15 @@ public class ArticleService {
         return new Response<>(IdEncrypter.encodeId(article.getId()));
     }
 
+    /**
+     * 获取文章列表.
+     *
+     * @param categoryId
+     * @param individualId
+     * @param currentPage
+     * @param pageSize
+     * @return Page
+     */
     public Page<ArticleModel> getArticleList(Integer categoryId, Integer individualId, Integer currentPage, Integer pageSize) {
         Integer cnt = articleExtendMapper.countArticleList(categoryId, individualId);
         if (cnt <= 0) {
@@ -117,6 +140,15 @@ public class ArticleService {
     }
 
 
+    /**
+     * {@link ArticleModel}
+     *
+     * =>
+     *
+     * {@link ArticleModel}
+     *
+     * @return Converter
+     */
     @NotNull
     private Converter<ArticleModel, ArticleModel> getArticleModelConverter() {
         return new Converter<>(model -> {
@@ -131,6 +163,14 @@ public class ArticleService {
         });
     }
 
+
+    /**
+     * 获取文章详情.
+     *
+     * @param articleId
+     * @param individualId
+     * @return ArticleModel
+     */
     public ArticleModel getArticleDetail(Integer articleId, Integer individualId) {
         ArticleModel articleModel = articleExtendMapper.getArticleDetail(articleId, individualId);
         if (articleModel == null) {
@@ -142,6 +182,13 @@ public class ArticleService {
         return getArticleModelConverter().convert(articleModel);
     }
 
+    /**
+     * 更新文章统计信息.
+     *
+     * @param articleId
+     * @param cnt
+     * @param statisticsEnum
+     */
     public void updateArticleStatistics(Integer articleId, Integer cnt, StatisticsEnum statisticsEnum) {
         threadPoolTaskExecutor.execute(() -> {
             Article article = this.getArticle(articleId);
@@ -169,6 +216,14 @@ public class ArticleService {
         });
     }
 
+    /**
+     * 点赞文章操作.
+     *
+     * @param individualId
+     * @param articleId
+     * @param like
+     * @return Response
+     */
     public Response<Object> likeArticle(Integer individualId, Integer articleId, Boolean like) {
         Integer status = (like ? StatusEnum.VALID : StatusEnum.INVALID).getCode();
         this.articleLikeExtendMapper.upsert(individualId, articleId, status);
@@ -176,12 +231,28 @@ public class ArticleService {
         return Response.SUCCESS;
     }
 
+    /**
+     * 个人对文章的点赞数.
+     *
+     * @param individualId
+     * @param articleId
+     * @param status
+     * @return Integer
+     */
     public Integer countArticleIndividualLike(Integer individualId, Integer articleId, Integer status) {
         ArticleLikeExample example = new ArticleLikeExample();
         example.or().andArticleIdEqualTo(articleId).andIndividualIdEqualTo(individualId).andStatusEqualTo(status);
         return articleLikeExtendMapper.countByExample(example);
     }
 
+    /**
+     * 收藏操作.
+     *
+     * @param individualId
+     * @param articleId
+     * @param bookmark
+     * @return Response
+     */
     public Response<Object> bookmark(Integer individualId, Integer articleId, Boolean bookmark) {
         Integer status = bookmark ? StatusEnum.VALID.getCode() : StatusEnum.INVALID.getCode();
         ArticleBookmark articleBookmark = new ArticleBookmark();
@@ -210,17 +281,39 @@ public class ArticleService {
         return articleBookmarks.stream().map(ArticleBookmark::getIndividualId).collect(Collectors.toList());
     }
 
+    /**
+     * 个人对文章的收藏数.
+     *
+     * @param individualId
+     * @param articleId
+     * @param status
+     * @return Integer
+     */
     public Integer countArticleIndividualBookmark(Integer individualId, Integer articleId, Integer status) {
         ArticleBookmarkExample example = new ArticleBookmarkExample();
         example.or().andArticleIdEqualTo(articleId).andIndividualIdEqualTo(individualId).andStatusEqualTo(status);
         return articleBookmarkExtendMapper.countByExample(example);
     }
 
+    /**
+     * 个人收藏列表.
+     *
+     * @param individualId
+     * @param currentPage
+     * @param pageSize
+     * @return List
+     */
     public List<ArticleModel> getIndividualBookmarkList(Integer individualId, Integer currentPage, Integer pageSize) {
         Integer offset = (currentPage - 1) * pageSize;
         return this.getArticleModelConverter().convert(this.articleExtendMapper.getIndividualBookmarkList(individualId, offset, pageSize));
     }
 
+    /**
+     * 个人收藏数.
+     *
+     * @param individualId
+     * @return Integer
+     */
     public Integer getIndividualBookmarkCnt(Integer individualId) {
         ArticleBookmarkExample example = new ArticleBookmarkExample();
         example.or().andIndividualIdEqualTo(individualId).andStatusEqualTo(StatusEnum.VALID.getCode());

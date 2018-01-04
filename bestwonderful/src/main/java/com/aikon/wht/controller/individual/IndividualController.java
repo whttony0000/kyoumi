@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
+ * 个人controller.
+ *
  * @author haitao.wang
  */
 @Controller
@@ -32,6 +34,14 @@ public class IndividualController extends BaseController{
     @Autowired
     ArticleService articleService;
 
+    /**
+     * 个人详情页.
+     *
+     * @param modelMap
+     * @param individualEid
+     * @param currentIndividual
+     * @return String
+     */
     @RequestMapping("individualDetail")
     String individualDetail(ModelMap modelMap,String individualEid,@IndividualInfo Individual currentIndividual) {
         Integer individualId = IdEncrypter.decodeId(individualEid);
@@ -43,6 +53,14 @@ public class IndividualController extends BaseController{
         return "template";
     }
 
+    /**
+     * 个人信息编辑页.
+     *
+     * @param modelMap
+     * @param individualId
+     * @return String
+     * @throws InactiveException
+     */
     @RequestMapping("editIndividual")
     String editIndividual(ModelMap modelMap, @IndividualInfo Integer individualId) throws InactiveException {
         super.isTmpUser();
@@ -52,6 +70,15 @@ public class IndividualController extends BaseController{
         return "template";
     }
 
+    /**
+     * 保存个人信息操作.
+     *
+     * @param individual
+     * @param individualId
+     * @return Response
+     * @throws InactiveException
+     * @throws InvalidInputException
+     */
     @RequestMapping("/saveIndividual")
     @ResponseBody
     Response<Individual> saveIndividual(@RequestBody Individual individual, @IndividualInfo Integer individualId) throws InactiveException, InvalidInputException {
@@ -64,6 +91,13 @@ public class IndividualController extends BaseController{
         return individualService.saveIndividual(individual);
     }
 
+    /**
+     * 个人详情数据.
+     *
+     * @param individualEid
+     * @return Response
+     * @throws InactiveException
+     */
     @RequestMapping("/getIndividualDetail")
     @ResponseBody
     Response<IndividualDetail> getIndividualDetail(String individualEid) throws InactiveException {
@@ -72,6 +106,15 @@ public class IndividualController extends BaseController{
         return individualService.getIndividualDetail(individualId);
     }
 
+    /**
+     * 关注个人操作.
+     *
+     * @param individualEid
+     * @param onWatch
+     * @param watcherId
+     * @return Response
+     * @throws InactiveException
+     */
     @RequestMapping("/watchIndividual")
     @ResponseBody
     Response<Object> watchIndividual(String individualEid,Boolean onWatch,@IndividualInfo Integer watcherId) throws InactiveException {
@@ -81,6 +124,14 @@ public class IndividualController extends BaseController{
 
     }
 
+    /**
+     * 关注个人列表.
+     *
+     * @param watcherEid
+     * @param currentPage
+     * @param pageSize
+     * @return Response
+     */
     @RequestMapping("/getOnWatchIndividualList")
     @ResponseBody
     Response<Page<IndividualDetail>> getOnWatchIndividualList(String watcherEid, Integer currentPage, Integer pageSize) {
@@ -88,6 +139,14 @@ public class IndividualController extends BaseController{
         return new Response<>(new Page<>(individualService.getOnWatchIndividualList(watcherId, currentPage, pageSize), individualService.getOnWatchIndividualCnt(watcherId)));
     }
 
+    /**
+     * 粉丝列表.
+     *
+     * @param watchedEid
+     * @param currentPage
+     * @param pageSize
+     * @return Response
+     */
     @RequestMapping("/getFanList")
     @ResponseBody
     Response<Page<IndividualDetail>> getFanList(String watchedEid, Integer currentPage, Integer pageSize) {
@@ -96,6 +155,14 @@ public class IndividualController extends BaseController{
     }
 
 
+    /**
+     * 个人收藏列表.
+     *
+     * @param individualEid
+     * @param currentPage
+     * @param pageSize
+     * @return Response
+     */
     @RequestMapping("/getIndividualBookmarkList")
     @ResponseBody
     Response<Page<ArticleModel>> getIndividualBookmarkList(String individualEid,Integer currentPage,Integer pageSize) {

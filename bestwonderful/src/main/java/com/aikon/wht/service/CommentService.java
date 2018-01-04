@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * 评论service.
+ *
  * @author haitao.wang
  */
 @Service
@@ -42,6 +44,15 @@ public class CommentService {
     @Autowired
     ArticleService articleService;
 
+    /**
+     * 获取文章的评论.
+     *
+     * @param articleId
+     * @param currentPage
+     * @param pageSize
+     * @param inidividualId
+     * @return List
+     */
     public List<CommentModel> getComments(Integer articleId, Integer currentPage, Integer pageSize, Integer inidividualId) {
         Integer offset = (currentPage - 1) * pageSize;
         List<CommentModel> commentModels = this.commentExtendMapper.getComments(articleId,offset,pageSize);
@@ -58,6 +69,15 @@ public class CommentService {
         return this.getCommentConverter().convert(commentModels);
     }
 
+    /**
+     * {@link CommentModel}
+     *
+     * =>
+     *
+     * {@link CommentModel}
+     *
+     * @return Converter
+     */
     public Converter<CommentModel, CommentModel> getCommentConverter() {
         return new Converter<>(commentModel -> {
             commentModel.setIndividualEid(IdEncrypter.encodeId(commentModel.getIndividualId()));
@@ -66,6 +86,15 @@ public class CommentService {
         });
     }
 
+    /**
+     * {@link CommentModel}
+     *
+     * =>
+     *
+     * {@link CommentModel}
+     *
+     * @return Converter
+     */
     public Converter<CommentModel, CommentModel> getSubCommentConverter() {
         return new Converter<>(subComment -> {
             subComment.setTargetIndividualEid(IdEncrypter.encodeId(subComment.getTargetIndividualId()));
@@ -74,12 +103,27 @@ public class CommentService {
         });
     }
 
+    /**
+     * 获取评论数.
+     *
+     * @param articleId
+     * @return Integer
+     */
     public Integer getCommentCnt(Integer articleId) {
         CommentExample example = new CommentExample();
         example.or().andArticleIdEqualTo(articleId).andStatusEqualTo(StatusEnum.VALID.getCode());
         return commentExtendMapper.countByExample(example);
     }
 
+    /**
+     * 提交评论的评论.
+     *
+     * @param commentId
+     * @param targetIndividualId
+     * @param creator
+     * @param content
+     * @return Response
+     */
     public Response<CommentModel> submitSubComment(Integer commentId, Integer targetIndividualId, Individual creator, String content) {
         Individual targetIndividual = individualService.getIndividualById(targetIndividualId);
         if (targetIndividual == null) {
@@ -106,6 +150,14 @@ public class CommentService {
         return new Response<>(subCommentModel);
     }
 
+    /**
+     * 提交评论.
+     *
+     * @param articleId
+     * @param content
+     * @param individual
+     * @return Response
+     */
     public Response<CommentModel> submitComment(Integer articleId, String content, Individual individual) {
         Comment comment = new Comment();
         comment.setArticleId(articleId);
@@ -130,6 +182,12 @@ public class CommentService {
         return new Response<>(this.getCommentConverter().convert(commentModel));
     }
 
+    /**
+     * 获取当前评论总楼层.
+     *
+     * @param articleId
+     * @return Integer
+     */
     public Integer getCurrentFloor(Integer articleId) {
         return Optional.ofNullable(commentExtendMapper.getCurrentFloor(articleId)).orElse(1);
     }

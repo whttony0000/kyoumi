@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * 基本状态enum.
+ *
  * @author haitao.wang
  */
 @AllArgsConstructor

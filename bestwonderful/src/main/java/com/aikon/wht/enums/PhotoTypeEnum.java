@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
+ * 照片类别enum.
+ *
  * @author haitao.wang
  */
 @NoArgsConstructor

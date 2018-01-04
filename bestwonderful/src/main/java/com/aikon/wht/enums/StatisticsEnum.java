@@ -1,6 +1,8 @@
 package com.aikon.wht.enums;
 
 /**
+ * 统计类别enum.
+ *
  * @author haitao.wang
  */
 public enum StatisticsEnum {

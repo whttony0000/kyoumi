@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * 个人操作日志类别enum.
+ *
  * @author haitao.wang
  */
 @AllArgsConstructor

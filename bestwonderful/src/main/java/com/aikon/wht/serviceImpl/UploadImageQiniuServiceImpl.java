@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
+ * 上传七牛云服务实现.
+ *
  * @author haitao.wang
  */
 @Slf4j
@@ -43,6 +45,12 @@ public class UploadImageQiniuServiceImpl implements UploadImageService {
     @Autowired
     CommonService commonService;
 
+    /**
+     * 上传.
+     *
+     * @param in
+     * @return String
+     */
     @Override
     public String upload(InputStream in) {
         //构造一个带指定Zone对象的配置类
@@ -76,6 +84,13 @@ public class UploadImageQiniuServiceImpl implements UploadImageService {
         return null;
     }
 
+    /**
+     * 上传.
+     *
+     * @param file
+     * @param imageFormatQiniuEnum
+     * @return UploadFileModel
+     */
     @Override
     public UploadFileModel upload(MultipartFile file, ImageFormatQiniuEnum imageFormatQiniuEnum) {
         UploadFileModel uploadFileModel = new UploadFileModel();
@@ -95,6 +110,14 @@ public class UploadImageQiniuServiceImpl implements UploadImageService {
         return uploadFileModel;
     }
 
+    /**
+     * 校验图片.
+     *
+     * @param file
+     * @param allowedTypes
+     * @param maxSize
+     * @return String
+     */
     @Override
     public String checkFileTypeAndSize(MultipartFile file, List<String> allowedTypes, int maxSize) {
         if (file == null) {

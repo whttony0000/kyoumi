@@ -6,6 +6,8 @@ import lombok.Getter;
 import java.util.Arrays;
 
 /**
+ * 角色种类enum.
+ *
  * @author haitao.wang
  */
 @AllArgsConstructor

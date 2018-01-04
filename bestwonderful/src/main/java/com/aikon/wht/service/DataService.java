@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 数据服务service.
+ *
  * @author haitao.wang
  */
 @Service
@@ -37,6 +39,11 @@ public class DataService {
     @Qualifier("singleMongoDatabase")
     MongoDatabase mongoDatabase;
 
+    /**
+     * 实时票房列表.
+     *
+     * @return List
+     */
     public List<String> getRealTimeBoxOffice() {
         BsonDocument filter = new BsonDocument();
 //        String today = new DateTime().toString("yyyy-MM-dd");
@@ -45,19 +52,45 @@ public class DataService {
     }
 
 
+    /**
+     * 最新资讯列表.
+     *
+     * @param currentPage
+     * @param pageSize
+     * @return Page
+     */
     public Page<String> getLatestNews(Integer currentPage, Integer pageSize) {
         BsonDocument filter = new BsonDocument();
         return this.getPage(LATEST_NEWS, filter, currentPage, pageSize);
     }
 
+    /**
+     * 牛股列表.
+     *
+     * @param currentPage
+     * @param pageSize
+     * @return Page
+     */
     public Page<String> getStockTopList(Integer currentPage, Integer pageSize) {
         return this.getPage(STOCK_TOP_LIST, new BsonDocument(), currentPage, pageSize);
     }
 
+    /**
+     * GDP数据.
+     *
+     * @return List
+     */
     public List<String> getGDPYear() {
         return this.getData(GDP_YEAR, new BsonDocument());
     }
 
+    /**
+     * douban top250数据.
+     *
+     * @param currentPage
+     * @param pageSize
+     * @return Page
+     */
     public Page<String> getDoubanMovieTop250(Integer currentPage, Integer pageSize) {
         MongoDao mongoDao = new MongoDao(mongoDatabase.getCollection(DOUBAN_MOVIE_TOP_250));
         Long total = mongoDao.count(new BsonDocument());
@@ -66,12 +99,28 @@ public class DataService {
         return new Page<>(doubanMovieTop250List,total.intValue());
     }
 
+    /**
+     * page形式返回.
+     *
+     * @param collectionName
+     * @param filter
+     * @param currentPage
+     * @param limit
+     * @return Page
+     */
     public Page<String> getPage(String collectionName, BsonDocument filter, Integer currentPage, Integer limit) {
         MongoDao mongoDao = new MongoDao(mongoDatabase.getCollection(collectionName));
         Long total = mongoDao.count(filter);
         return new Page<>(mongoDao.findJsonList(filter, currentPage, limit), total.intValue());
     }
 
+    /**
+     * list形式返回.
+     *
+     * @param collectionName
+     * @param filter
+     * @return List
+     */
     public List<String> getData(String collectionName, BsonDocument filter) {
         return new MongoDao(mongoDatabase.getCollection(collectionName)).findJsonList(filter);
     }

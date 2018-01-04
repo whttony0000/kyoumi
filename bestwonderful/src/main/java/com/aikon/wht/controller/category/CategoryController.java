@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
+ * 分类controller.
+ *
  * @author haitao.wang
  */
 @Controller
@@ -109,6 +111,14 @@ public class CategoryController extends BaseController {
         return new Response<>(categoryList);
     }
 
+    /**
+     * 更新或新增分类.
+     *
+     * @param categoryDetailModel
+     * @param individualId
+     * @return Response
+     * @throws NoPermissionException
+     */
     @RequestMapping("/upsertCategory")
     @ResponseBody
     Response upsertCategory(@RequestBody CategoryDetailModel categoryDetailModel, @IndividualInfo Integer individualId) throws NoPermissionException {
@@ -118,12 +128,27 @@ public class CategoryController extends BaseController {
     }
 
 
+    /**
+     * 分类列表页.
+     *
+     * @param modelMap
+     * @return String
+     */
     @RequestMapping("categoryList")
     String categoryList(ModelMap modelMap) {
         modelMap.addAttribute("inner_page", "categoryList.ftl");
         return "template";
     }
 
+    /**
+     * 关注分类操作.
+     *
+     * @param categoryEid
+     * @param watch
+     * @param individualId
+     * @return Response
+     * @throws InactiveException
+     */
     @RequestMapping("/watchCategory")
     @ResponseBody
     Response<Object> watchCategory(String categoryEid,Boolean watch, @IndividualInfo Integer individualId) throws InactiveException {
@@ -132,6 +157,14 @@ public class CategoryController extends BaseController {
         return categoryService.watchCategory(categoryId,watch, individualId);
     }
 
+    /**
+     * 获取关注的分类列表数据.
+     *
+     * @param watcherEid
+     * @param currentPage
+     * @param pageSize
+     * @return Response
+     */
     @RequestMapping("/getOnWatchCategoryList")
     @ResponseBody
     Response<Page<CategoryDetailModel>> getOnWatchCategoryList(String watcherEid, Integer currentPage, Integer pageSize){

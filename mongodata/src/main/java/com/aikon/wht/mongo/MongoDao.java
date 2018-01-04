@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * mongo dao.
+ *
  * @author haitao.wang
  */
 public class MongoDao {

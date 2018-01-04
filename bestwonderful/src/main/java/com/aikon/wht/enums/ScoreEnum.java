@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * 分值奖励enum.
+ *
  * @author haitao.wang
  */
 @AllArgsConstructor

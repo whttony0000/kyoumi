@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * 事件处理类.
+ *
  * @author haitao.wang
  */
 @ControllerAdvice

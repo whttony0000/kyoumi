@@ -1,6 +1,8 @@
 package com.aikon.wht.event;
 
 /**
+ * 系统内事件监听抽象.
+ *
  * @author haitao.wang
  */
 public abstract class AbstractNoticeListener<T extends AbstractNoticeEvent>  {

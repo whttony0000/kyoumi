@@ -15,6 +15,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 默认导出实现.
+ *
  * @author haitao.wang
  */
 @Slf4j
@@ -30,6 +32,15 @@ public class ExportServiceImpl implements ExportService {
 
     }
 
+    /**
+     * 导出excel.
+     *
+     * @param servletResponse
+     * @param request
+     * @param exportExcelCallBack
+     * @param <S>
+     * @param <T>
+     */
     public <S, T extends ExportParam> void exportExcel(HttpServletResponse servletResponse, T request, ExportExcelCallBack<S, T> exportExcelCallBack) {
         request.setCurrentPage(1);
         request.setMaxRows(MAX_ROWS);

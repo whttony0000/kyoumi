@@ -14,7 +14,11 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 
-
+/**
+ * 邮件工具类.
+ *
+ * @author haitao.wang
+ */
 @Component
 public class MailUtil {
 
@@ -32,7 +36,18 @@ public class MailUtil {
 	RateLimiter rateLimiter;
 
 
+    /**
+     * 发送邮件.
+     *
+     * @param sendTo
+     * @param subject
+     * @param content
+     * @param attachName
+     * @param file
+     * @throws MessagingException
+     */
 	public void sendMail(String sendTo, String subject, String content, String attachName, File file) throws MessagingException {
+	    // 限流.
 		rateLimiter.acquire();
         MimeMessage mailMessage = senderImpl.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mailMessage, true, DEFAULT_CHARSET);

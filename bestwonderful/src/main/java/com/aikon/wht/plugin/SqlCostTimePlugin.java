@@ -19,6 +19,8 @@ import java.util.Locale;
 import java.util.Properties;
 
 /**
+ * Mybatis sql执行时间插件.
+ *
  * @author haitao.wang
  */
 @Intercepts({

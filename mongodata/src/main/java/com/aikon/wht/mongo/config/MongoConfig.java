@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * mongo配置.
+ *
  * @author haitao.wang
  */
 public class MongoConfig {

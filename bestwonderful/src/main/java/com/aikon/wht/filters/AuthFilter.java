@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * Created by haitao.wang on 2016/12/1.
+ * 权限拦截器.
+ *
+ * @author haitao.wang
  */
 public class AuthFilter implements Filter {
 

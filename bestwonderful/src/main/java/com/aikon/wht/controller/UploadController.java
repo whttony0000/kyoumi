@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 上传controller.
+ *
  * @author haitao.wang
  */
 @Controller
@@ -25,12 +27,24 @@ public class UploadController {
     @Autowired
     UploadImageService uploadImageService;
 
+    /**
+     * 上传图片操作（原始图）.
+     *
+     * @param file
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/image")
     public UploadFileModel uploadImage(MultipartFile file) {
         return this.upload(file, ImageFormatQiniuEnum.ORIGIN);
     }
 
+    /**
+     * 上传图片操作（水印图）.
+     *
+     * @param file
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/imageWater")
     public UploadFileModel uploadImageWater(MultipartFile file) {
@@ -38,6 +52,13 @@ public class UploadController {
     }
 
 
+    /**
+     * 编辑器传图操作.
+     *
+     * @param file
+     * @param response
+     * @throws Exception
+     */
     @RequestMapping("/imageEditor")
     @ResponseBody
     public void uploadImageEditor(@RequestParam(value = "upfile", required = false) MultipartFile file, HttpServletResponse response) throws Exception {
@@ -59,6 +80,13 @@ public class UploadController {
     }
 
 
+    /**
+     * 传图方法.
+     *
+     * @param file
+     * @param qiniuEnum
+     * @return UploadFileModel
+     */
     private UploadFileModel upload(MultipartFile file, ImageFormatQiniuEnum qiniuEnum) {
         UploadFileModel uploadFileModel = new UploadFileModel();
         String msg = uploadImageService.checkFileTypeAndSize(file, Lists.newArrayList("jpg", "png", "bmp","jpeg"), 3);

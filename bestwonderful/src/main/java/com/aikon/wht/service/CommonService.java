@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
+ * 通用service.
+ *
  * @author haitao.wang
  */
 @Service
@@ -14,6 +16,12 @@ public class CommonService {
     @Value("${imageDomainQiniu}")
     String imageDomainQiniu;
 
+    /**
+     * 图片url生成.
+     *
+     * @param key
+     * @return String
+     */
     public String getImageUrlByKey(String key) {
         if (StringUtils.isEmpty(key)) {
             return null;
@@ -22,6 +30,13 @@ public class CommonService {
 
     }
 
+    /**
+     * 图片url生成.
+     *
+     * @param key
+     * @param ifqe
+     * @return String
+     */
     public String getImageUrlByKey(String key, ImageFormatQiniuEnum ifqe) {
         if (getImageUrlByKey(key) == null) {
             return null;

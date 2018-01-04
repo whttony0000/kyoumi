@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
+ * 分类service.
+ *
  * @author haitao.wang
  */
 @Service
@@ -97,6 +99,13 @@ public class CategoryService {
         return Response.SUCCESS;
     }
 
+    /**
+     * 获取分类列表.
+     *
+     * @param showImage
+     * @param individualId
+     * @return List
+     */
     public List<CategoryDetailModel> getCategoryList(Boolean showImage, Integer individualId) {
         List<CategoryDetailModel> categoryList = Lists.newArrayList();
         CategoryExample categoryExample = new CategoryExample();
@@ -120,6 +129,7 @@ public class CategoryService {
                     categoryDetailModel.setCategoryEid(IdEncrypter.encodeId(category.getId()));
                     categoryDetailModel.setDescription(category.getDescription());
                     categoryDetailModel.setName(category.getName());
+                    // 需要图片则加入图片url.
                     if (showImage) {
                         UploadFileModel uploadFileModel = new UploadFileModel();
                         uploadFileModel.setKey(category.getPhotoKey());
@@ -134,12 +144,19 @@ public class CategoryService {
                     categoryList.add(categoryDetailModel);
                 }
         );
+        //根据是否已关注排序.
         if (hasOnWatchCategory) {
             categoryList.sort(Comparator.comparing(CategoryDetailModel::getOnWatch).reversed());
         }
         return categoryList;
     }
 
+    /**
+     * 个人关注分类列表.
+     *
+     * @param individualId
+     * @return List
+     */
     public List<Integer> getOnWatchCategoryIds(Integer individualId) {
         MidIndividualCategoryExample midExample = new MidIndividualCategoryExample();
         midExample.or().andIndividualIdEqualTo(individualId).andStatusEqualTo(StatusEnum.VALID.getCode());
@@ -150,6 +167,12 @@ public class CategoryService {
         return midIndividualCategories.stream().map(MidIndividualCategory::getCategoryId).collect(Collectors.toList());
     }
 
+    /**
+     * 个人关注分类列表.
+     *
+     * @param individualId
+     * @return List
+     */
     public List<Category> getOnWatchCategories(Integer individualId) {
         CategoryExample example = new CategoryExample();
         example.or().andIdIn(this.getOnWatchCategoryIds(individualId)).andStatusEqualTo(StatusEnum.VALID.getCode());
@@ -160,12 +183,29 @@ public class CategoryService {
         return this.getConverter().convert(this.getOnWatchCategories(individualId));
     }
 
+    /**
+     * 个人关注分类列表.
+     *
+     * @param watcherId
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
     public List<CategoryDetailModel> getOnWatchCategoryList(Integer watcherId, Integer currentPage, Integer pageSize) {
         Integer offset = (currentPage - 1) * pageSize;
         List<Category> categories = categoryExtendMapper.getOnWatchCategoryList(watcherId,offset,pageSize);
         return this.getConverter().convert(Optional.ofNullable(categories).orElse(Collections.EMPTY_LIST));
     }
 
+    /**
+     * {@link Category}
+     *
+     * =>
+     *
+     * {@link CategoryDetailModel}
+     *
+     * @return Converter
+     */
     private Converter<Category, CategoryDetailModel> getConverter() {
         return new Converter<>(category -> {
             CategoryDetailModel detailModel = new CategoryDetailModel();
@@ -181,13 +221,27 @@ public class CategoryService {
     }
 
 
-
+    /**
+     * 个人关注分类数.
+     *
+     * @param individualId
+     * @return Integer
+     */
     public Integer getOnWatchCategoryCnt(Integer individualId) {
         MidIndividualCategoryExample midExample = new MidIndividualCategoryExample();
         midExample.or().andIndividualIdEqualTo(individualId).andStatusEqualTo(StatusEnum.VALID.getCode());
         return midIndividualCategoryExtendMapper.countByExample(midExample);
     }
 
+
+    /**
+     * 关注分类操作.
+     *
+     * @param categoryId
+     * @param watch
+     * @param individualId
+     * @return Response
+     */
     public Response<Object> watchCategory(Integer categoryId, Boolean watch, Integer individualId) {
         MidIndividualCategory midIndividualCategory = new MidIndividualCategory();
         midIndividualCategory.setCategoryId(categoryId);

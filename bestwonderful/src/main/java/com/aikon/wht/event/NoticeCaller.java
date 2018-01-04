@@ -10,6 +10,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
+ * 事件发布器.
+ *
  * @author haitao.wang
  */
 @Slf4j
@@ -17,11 +19,23 @@ public class NoticeCaller implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
+    /**
+     * 初始化时获取上下文.
+     *
+     * @param applicationContext
+     * @throws BeansException
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
+    /**
+     * 根据事件类型发布事件.
+     *
+     * @param eventModel
+     * @param clazz
+     */
     public void publishEvent(EventModel eventModel,Class<? extends AbstractNoticeEvent> clazz) {
         Constructor constructor;
         try {

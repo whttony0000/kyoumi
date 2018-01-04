@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
+ * 评论及评论的评论controller.
+ *
  * @author haitao.wang
  */
 @Controller
@@ -24,6 +26,15 @@ public class CommentController extends BaseController{
     @Autowired
     CommentService commentService;
 
+    /**
+     * 评论数据.
+     *
+     * @param articleEid
+     * @param currentPage
+     * @param pageSize
+     * @param inidividualId
+     * @return Response
+     */
     @RequestMapping("/getComments")
     @ResponseBody
     Response<Page<CommentModel>> getComments(String articleEid, Integer currentPage, Integer pageSize,Integer inidividualId) {
@@ -31,6 +42,16 @@ public class CommentController extends BaseController{
         return new Response<>(new Page(commentService.getComments(articleId, currentPage, pageSize, inidividualId),commentService.getCommentCnt(articleId)));
     }
 
+    /**
+     * 提交评论的评论.
+     *
+     * @param commentId
+     * @param targetIndividualEid
+     * @param content
+     * @param creator
+     * @return Response
+     * @throws InactiveException
+     */
     @RequestMapping("/submitSubComment")
     @ResponseBody
     Response<CommentModel> submitSubComment(Integer commentId,String targetIndividualEid, String content, @IndividualInfo Individual creator) throws InactiveException {
@@ -42,6 +63,15 @@ public class CommentController extends BaseController{
         return commentService.submitSubComment(commentId,targetIndividualId,creator,content);
     }
 
+    /**
+     * 提交评论.
+     *
+     * @param articleEid
+     * @param content
+     * @param individual
+     * @return Response
+     * @throws InactiveException
+     */
     @RequestMapping("/submitComment")
     @ResponseBody
     Response<CommentModel> submitComment(String articleEid, String content, @IndividualInfo Individual individual) throws InactiveException {

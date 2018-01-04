@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * 通知类别enum.
+ *
  * @author haitao.wang
  */
 @AllArgsConstructor

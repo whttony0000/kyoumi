@@ -22,6 +22,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 /**
+ * 文章controller.
+ *
  * @author haitao.wang
  */
 @Controller
@@ -33,6 +35,14 @@ public class ArticleController extends BaseController {
     @Autowired
     CategoryService categoryService;
 
+    /**
+     * 文章编辑页.
+     *
+     * @param modelMap
+     * @param articleEid
+     * @return String
+     * @throws InactiveException
+     */
     @RequestMapping("/editArticle")
     String editArticle(ModelMap modelMap, String articleEid) throws InactiveException {
         super.isTmpUser();
@@ -50,6 +60,13 @@ public class ArticleController extends BaseController {
         return "template";
     }
 
+    /**
+     * 新增文章页.
+     *
+     * @param modelMap
+     * @return String
+     * @throws InactiveException
+     */
     @RequestMapping(value = "/addArticle")
     String addArticle(ModelMap modelMap) throws InactiveException {
         super.isTmpUser();
@@ -60,21 +77,43 @@ public class ArticleController extends BaseController {
         return "template";
     }
 
+    /**
+     * 文章列表页.
+     *
+     * @param modelMap
+     * @return
+     */
     @RequestMapping(value = "/articleList")
     String articleList(ModelMap modelMap) {
         modelMap.addAttribute("inner_page", "articleList.ftl");
         return "template";
     }
 
+
+    /**
+     * 文章详情页.
+     *
+     * @param modelMap
+     * @param articleEid
+     * @return
+     */
     @RequestMapping("/articleDetail")
     String articleDetail(ModelMap modelMap, String articleEid) {
         modelMap.addAttribute("articleEid", articleEid);
         Integer articleId = IdEncrypter.decodeId(articleEid);
         modelMap.addAttribute("inner_page", "articleDetail.ftl");
+        // 阅读次数+1.
         articleService.updateArticleStatistics(articleId, 1, StatisticsEnum.ARTICLE_READ_CNT);
         return "template";
     }
 
+    /**
+     * 文章及作者详情数据.
+     *
+     * @param articleEid
+     * @param individual
+     * @return ArticleModel
+     */
     @RequestMapping("/getArticleDetail")
     @ResponseBody
     ArticleModel getArticleDetail(String articleEid, @IndividualInfo Individual individual) {
@@ -82,12 +121,27 @@ public class ArticleController extends BaseController {
         return articleService.getArticleDetail(articleId, individual.getId());
     }
 
+    /**
+     * 文章数据.
+     *
+     * @param articleId
+     * @return Article
+     */
     @RequestMapping("/getArticle")
     @ResponseBody
     Article getArticle(Integer articleId) {
         return articleService.getArticle(articleId);
     }
 
+    /**
+     * 文章列表数据.
+     *
+     * @param categoryEid
+     * @param individualEid
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
     @RequestMapping("/getArticleList")
     @ResponseBody
     Response<Page<ArticleModel>> getArticleList(String categoryEid, String individualEid, @RequestParam(defaultValue = "1") Integer currentPage, @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -101,6 +155,15 @@ public class ArticleController extends BaseController {
         return new Response<>(articleService.getArticleList(categoryId, individualId, currentPage, pageSize));
     }
 
+    /**
+     * 保存文章数据.
+     *
+     * @param modelMap
+     * @param article
+     * @param individualId
+     * @return Response
+     * @throws InvalidInputException
+     */
     @RequestMapping(value = "/saveArticle", method = RequestMethod.POST)
     @ResponseBody
     Response<String> saveArticle(ModelMap modelMap, @RequestBody Article article, @IndividualInfo Integer individualId) throws InvalidInputException {
@@ -109,6 +172,15 @@ public class ArticleController extends BaseController {
         return articleService.saveArticle(article);
     }
 
+    /**
+     * 点赞文章操作.
+     *
+     * @param individualId
+     * @param articleEid
+     * @param like
+     * @return Response
+     * @throws InactiveException
+     */
     @RequestMapping("/likeArticle")
     @ResponseBody
     Response<Object> likeArticle(@IndividualInfo Integer individualId, String articleEid, Boolean like) throws InactiveException {
@@ -117,6 +189,15 @@ public class ArticleController extends BaseController {
         return articleService.likeArticle(individualId, articleId, like);
     }
 
+    /**
+     * 收藏文章操作.
+     *
+     * @param individualId
+     * @param articleEid
+     * @param bookmark
+     * @return Response
+     * @throws InactiveException
+     */
     @RequestMapping("/bookmark")
     @ResponseBody
     Response<Object> bookmark(@IndividualInfo Integer individualId, String articleEid, Boolean bookmark) throws InactiveException {

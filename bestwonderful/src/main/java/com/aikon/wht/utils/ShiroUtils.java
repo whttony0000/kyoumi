@@ -5,7 +5,9 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 /**
- * Shiro工具类
+ * Shiro工具类.
+ *
+ * @author haitao.wang
  */
 public class ShiroUtils {
 

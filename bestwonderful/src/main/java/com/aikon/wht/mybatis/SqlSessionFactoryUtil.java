@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * SqlSession工厂工具.
+ *
  * @author haitao.wang
  */
 public class SqlSessionFactoryUtil {

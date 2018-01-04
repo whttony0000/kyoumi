@@ -3,6 +3,8 @@ package com.aikon.wht.exception;
 import lombok.Data;
 
 /**
+ * 账号未激活异常.
+ *
  * @author haitao.wang
  */
 @Data

@@ -15,11 +15,18 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 /**
+ * controller基类.
+ *
  * @author haitao.wang
  */
 @Slf4j
 public class BaseController {
 
+    /**
+     * 是否临时用户.
+     *
+     * @throws InactiveException
+     */
     public void isTmpUser() throws InactiveException {
         Subject subject = ShiroUtils.getSubject();
         if (subject.hasRole(RoleEnum.TMP_USER.getDesc())) {
@@ -27,6 +34,11 @@ public class BaseController {
         }
     }
 
+    /**
+     * 是否管理员.
+     *
+     * @throws NoPermissionException
+     */
     public void isAdmin() throws NoPermissionException {
         Subject subject = ShiroUtils.getSubject();
         if (!subject.hasRole(RoleEnum.ADMIN.getDesc())) {
@@ -34,6 +46,13 @@ public class BaseController {
         }
     }
 
+    /**
+     * 输入校验.
+     *
+     * @param object
+     * @param fieldNames
+     * @throws InvalidInputException
+     */
     public void checkInput(Object object, List<String> fieldNames) throws InvalidInputException {
         if (object == null || CollectionUtils.isEmpty(fieldNames)) {
             return;

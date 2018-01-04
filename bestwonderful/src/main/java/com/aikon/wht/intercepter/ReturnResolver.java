@@ -6,6 +6,8 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
+ * 返回拦截器.
+ *
  * @author haitao.wang
  */
 public class ReturnResolver implements HandlerMethodReturnValueHandler {

@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * 照片service.
+ *
  * @author haitao.wang
  */
 @Service

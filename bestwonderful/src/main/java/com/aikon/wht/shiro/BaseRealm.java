@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * realm for shiro.
+ *
+ * @author haitao.wang
  */
 @Slf4j
 public class BaseRealm extends AuthorizingRealm {
@@ -25,6 +27,12 @@ public class BaseRealm extends AuthorizingRealm {
     @Autowired
     IndividualService individualService;
 
+    /**
+     * 授权.
+     *
+     * @param principals
+     * @return AuthorizationInfo
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Individual individual = (Individual) principals.getPrimaryPrincipal();
@@ -34,6 +42,13 @@ public class BaseRealm extends AuthorizingRealm {
         return info;
     }
 
+    /**
+     * 验权.
+     *
+     * @param token
+     * @return AuthorizationInfo
+     * @throws AuthenticationException
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String mail = (String) token.getPrincipal();

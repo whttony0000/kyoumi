@@ -7,6 +7,8 @@ import com.mongodb.client.MongoDatabase;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
+ * mongodatabase bean factory.
+ *
  * @author haitao.wang
  */
 public class MongoDatabaseFactoryBean implements FactoryBean<MongoDatabase>{

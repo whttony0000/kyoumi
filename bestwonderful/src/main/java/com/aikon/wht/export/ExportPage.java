@@ -5,6 +5,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * 导出实体.
+ *
+ * @param <T>
+ */
 @Data
 @NoArgsConstructor
 public class ExportPage<T> {

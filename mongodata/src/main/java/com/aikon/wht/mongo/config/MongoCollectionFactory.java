@@ -4,6 +4,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 /**
+ * mongocolletion工厂.
+ *
  * @author haitao.wang
  */
 public class MongoCollectionFactory {

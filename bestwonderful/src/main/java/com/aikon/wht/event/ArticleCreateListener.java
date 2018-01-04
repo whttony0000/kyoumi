@@ -18,6 +18,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 /**
+ * 文章创建事件监听器.
+ *
  * @author haitao.wang
  */
 public class ArticleCreateListener extends AbstractNoticeListener<ArticleCreateEvent> implements ApplicationListener<ArticleCreateEvent> {
@@ -40,11 +42,21 @@ public class ArticleCreateListener extends AbstractNoticeListener<ArticleCreateE
     @Value("${port}")
     String port;
 
+    /**
+     * 事件操作.
+     *
+     * @param articleCreateEvent
+     */
     @Override
     public void onApplicationEvent(ArticleCreateEvent articleCreateEvent) {
         super.flow(articleCreateEvent);
     }
 
+    /**
+     * 事件操作.
+     *
+     * @param event
+     */
     @Override
     public void execute(ArticleCreateEvent event) {
         ArticleCreateEventModel eventModel = (ArticleCreateEventModel) event.getSource();
@@ -54,6 +66,7 @@ public class ArticleCreateListener extends AbstractNoticeListener<ArticleCreateE
         if (CollectionUtils.isEmpty(fanDetails) || individual == null) {
             return;
         }
+        // 生成通知入库并且邮件通知关注者.
         fanDetails.stream().forEach((fanDetail) -> {
             Notice notice = new Notice();
             notice.setStatus(StatusEnum.VALID.getCode());

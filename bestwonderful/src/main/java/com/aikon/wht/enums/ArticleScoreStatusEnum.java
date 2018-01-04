@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * 文章得分enum.
+ *
  * @author haitao.wang
  */
 @AllArgsConstructor

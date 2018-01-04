@@ -3,6 +3,8 @@ package com.aikon.wht.export;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 导出服务.
+ *
  * @author haitao.wang
  */
 public interface ExportService {

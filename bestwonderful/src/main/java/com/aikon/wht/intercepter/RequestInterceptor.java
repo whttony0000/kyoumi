@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * request拦截器.
+ *
  * @author haitao.wang
  */
 @Slf4j

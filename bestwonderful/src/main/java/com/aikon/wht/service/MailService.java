@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 
 /**
- * @author Administrator
+ * 邮件service.
+ *
+ * @author haitao.wang
  */
 @Service
 @Slf4j
@@ -40,6 +42,14 @@ public class MailService {
 
     private static final String TIME_CODE_KEY = "timeCode";
 
+    /**
+     * 发送激活邮件.
+     *
+     * @param mailAddr
+     * @param name
+     * @param mailMd5Hash
+     * @param url
+     */
     public void sendActiveMail(String mailAddr, String name, String mailMd5Hash, String url) {
         String mailTimeCode = IdEncrypter.encodeId(System.currentTimeMillis());
         String subject = "账号激活--BestWonderful";
@@ -65,14 +75,30 @@ public class MailService {
         this.sendMail(mailAddr, subject, content);
     }
 
+    /**
+     * 是否可发送邮件.
+     *
+     * @param id
+     * @return
+     */
     public boolean checkCanMailSend(Integer id) {
         IndividualLog individualLog = individualLogService.getLastSendMailLog(id);
         if (individualLog == null) {
             return true;
         }
+        // 上一邮件须在两分钟前.
         return new DateTime(individualLog.getCreateTime()).plus(2 * 60 * 1000).isBeforeNow();
     }
 
+    /**
+     * 发送关注者创建文章邮件.
+     *
+     * @param mailAddr
+     * @param fanName
+     * @param articleTitle
+     * @param individualName
+     * @param articleLink
+     */
     public void sendArticleCreateMail(String mailAddr, String fanName, String articleTitle, String individualName, String articleLink) {
         String subject = String.format("您关注的%s有新的文章--BestWonderful", individualName);
         StringBuilder content = new StringBuilder(300);
@@ -109,6 +135,13 @@ public class MailService {
         this.sendMail(mailAddr, subject, content.toString());
     }
 
+    /**
+     * 异步发送邮件.
+     *
+     * @param mailAddr
+     * @param subject
+     * @param content
+     */
     private void sendMail(String mailAddr, String subject, String content) {
         threadPoolTaskExecutor.execute(() -> {
             try {

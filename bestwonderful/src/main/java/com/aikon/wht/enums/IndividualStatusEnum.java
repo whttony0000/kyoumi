@@ -3,7 +3,9 @@ package com.aikon.wht.enums;
 import lombok.Getter;
 
 /**
- * @author Administrator
+ * 个人状态enum.
+ *
+ * @author haitao.wang
  */
 public enum IndividualStatusEnum {
 

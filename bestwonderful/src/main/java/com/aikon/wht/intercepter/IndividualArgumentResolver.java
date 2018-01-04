@@ -14,6 +14,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
+ * request 参数构造器 构造个人相关request参数.
+ *
  * @author haitao.wang
  */
 @Slf4j
@@ -32,14 +34,17 @@ public class IndividualArgumentResolver implements HandlerMethodArgumentResolver
         }
         Session session = subject.getSession();
         Individual individual = (Individual) session.getAttribute("individual");
+        // 访客.
         if (individual == null) {
             Individual individualGuest = new Individual();
             individualGuest.setId(0);
             individual = individualGuest;
         }
+        // 参数类型为Integer则参数赋值为individualId.
         if (parameter.getParameterType().equals(Integer.class)) {
             return individual.getId();
         }
+
         return individual;
     }
 }

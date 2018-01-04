@@ -42,7 +42,9 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * Created by haitao.wang on 2016/11/29.
+ * 注册登录controller.
+ *
+ * @author haitao.wang
  */
 @Controller
 @Slf4j
@@ -64,18 +66,37 @@ public class LoginController {
     @Autowired
     IndividualLogService individualLogService;
 
+    /**
+     * 注册页.
+     *
+     * @param modelMap
+     * @return String
+     */
     @RequestMapping("signUpPage")
     String signUpPage(ModelMap modelMap) {
         modelMap.addAttribute("inner_page", "signUp.ftl");
         return "template";
     }
 
+    /**
+     * 登录页.
+     *
+     * @param modelMap
+     * @return String
+     */
     @RequestMapping("signInPage")
     String signInPage(ModelMap modelMap) {
         modelMap.addAttribute("inner_page", "signIn.ftl");
         return "template";
     }
 
+    /**
+     * 主页.
+     *
+     * @param modelMap
+     * @param individual
+     * @return String
+     */
     @RequestMapping("/index")
     String index(ModelMap modelMap,@IndividualInfo Individual individual) {
         modelMap.addAttribute("inner_page", "index.ftl");
@@ -84,6 +105,13 @@ public class LoginController {
         return "template";
     }
 
+    /**
+     * 主页.
+     *
+     * @param modelMap
+     * @param individual
+     * @return String
+     */
     @RequestMapping("/")
     String toIndex(ModelMap modelMap,@IndividualInfo Individual individual) {
         return "redirect:/index";
@@ -112,12 +140,26 @@ public class LoginController {
     }
 
 
-
+    /**
+     * 注册登录页.
+     *
+     * @return ModelAndView
+     */
     @RequestMapping(value = "/loginPage")
     public ModelAndView loginPage(){
         return new ModelAndView("login");
     }
 
+    /**
+     * 注册操作.
+     *
+     * @param email
+     * @param password
+     * @param checkPass
+     * @param captcha
+     * @param name
+     * @return Response
+     */
     @RequestMapping(value = "/signUp", method = RequestMethod.POST)
     @ResponseBody
     public Response signUp(String email, String password, String checkPass, String captcha,String name) {
@@ -149,19 +191,22 @@ public class LoginController {
         individual.setMailMd5Hash(mailMd5Hash);
         individual.setStatus(IndividualStatusEnum.VALID.getCode());
         individual.setRole(RoleEnum.TMP_USER.getCode());
+        // 保存个人信息.
         Response<Individual> response = individualService.saveIndividual(individual);
         if (response.getStatus() != 1) {
             return response;
         }
         Individual individualFromDB = response.getData();
+        // 发送验证邮件.
         mailService.sendActiveMail(email, name, mailMd5Hash, "/index");
+        // 记录个人操作日志.
         individualLogService.createIndividualLog(individualFromDB.getId(),null, StatusEnum.VALID, IndividualLogTypeEnum.CREATED,individualFromDB.getId());
         return Response.SUCCESS;
 
     }
 
     /**
-     * 登录
+     * 登录操作.
      */
     @ResponseBody
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
@@ -191,6 +236,15 @@ public class LoginController {
         return Response.SUCCESS;
     }
 
+    /**
+     * 激活跳转页.
+     *
+     * @param mailMd5Hash
+     * @param timeCode
+     * @param link
+     * @param modelMap
+     * @return String
+     */
     @RequestMapping("/mailActive/{mailMd5Hash}/{timeCode}")
     public String activeAccountPage(@PathVariable String mailMd5Hash,@PathVariable String timeCode,String link, ModelMap modelMap) {
         Long minus = IdEncrypter.decodeId2Long(timeCode) - new DateTime().minus(24*60*60*1000).getMillis();
@@ -211,24 +265,47 @@ public class LoginController {
         return "activeJump";
     }
 
+    /**
+     * 登出操作.
+     *
+     * @param modelMap
+     * @return String
+     */
     @RequestMapping("/logout")
     public String logout(ModelMap modelMap) {
         ShiroUtils.logout();
         return "login";
     }
 
+    /**
+     * 关于页.
+     *
+     * @param modelMap
+     * @return String
+     */
     @RequestMapping("/about")
     public String about(ModelMap modelMap) {
         modelMap.addAttribute("inner_page","about.ftl");
         return "template";
     }
 
+    /**
+     * 联系页.
+     *
+     * @param modelMap
+     * @return String
+     */
     @RequestMapping("/contact")
     public String contact(ModelMap modelMap) {
         modelMap.addAttribute("inner_page","contact.ftl");
         return "template";
     }
 
+    /**
+     * mock.
+     *
+     * @return String
+     */
     @RequestMapping("/mock")
     public String mock() {
         Subject subject = ShiroUtils.getSubject();

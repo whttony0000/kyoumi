@@ -22,6 +22,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * 个人service.
+ *
  * @author haitao.wang
  */
 @Service
@@ -46,6 +48,12 @@ public class IndividualService {
     @Autowired
     CommonService commonService;
 
+    /**
+     * 保存个人信息.
+     *
+     * @param individual
+     * @return Response
+     */
     public Response<Individual> saveIndividual(Individual individual) {
         if (individual.getId() ==null) {
             individualExtendMapper.insertSelectiveExt(individual);
@@ -55,6 +63,12 @@ public class IndividualService {
         return new Response<>(individual);
     }
 
+    /**
+     * 根据mail获取个人信息.
+     *
+     * @param mail
+     * @return Individual
+     */
     public Individual getIndividualByMail(String mail) {
         IndividualExample example = new IndividualExample();
         example.or().andMailEqualTo(mail).andStatusNotEqualTo(IndividualStatusEnum.INVALID.getCode());
@@ -67,6 +81,12 @@ public class IndividualService {
         }
     }
 
+    /**
+     * mail是否已注册.
+     *
+     * @param email
+     * @return Boolean
+     */
     public Boolean mailExist(String email) {
         IndividualExample individualExample = new IndividualExample();
         individualExample.or().andMailEqualTo(email).andStatusNotEqualTo(IndividualStatusEnum.INVALID.getCode());
@@ -74,6 +94,12 @@ public class IndividualService {
         return emailCnt > 0;
     }
 
+    /**
+     * 姓名是否已注册.
+     *
+     * @param name
+     * @return boolean
+     */
     public boolean nameExist(String name) {
         IndividualExample individualExample = new IndividualExample();
         individualExample.or().andNameEqualTo(name).andStatusNotEqualTo(IndividualStatusEnum.INVALID.getCode());
@@ -81,6 +107,12 @@ public class IndividualService {
         return nameCnt > 0;
     }
 
+    /**
+     * 获取个人信息.
+     *
+     * @param individualId
+     * @return Individual
+     */
     public Individual getIndividualById(Integer individualId) {
         Individual individual = individualExtendMapper.selectByPrimaryKey(individualId);
         if (individual == null) {
@@ -92,6 +124,12 @@ public class IndividualService {
         return individual;
     }
 
+    /**
+     * 更新个人得分.
+     *
+     * @param individualId
+     * @param score
+     */
     public void updateScore(Integer individualId,Integer score) {
         Individual individual = this.getIndividualById(individualId);
         if (individual == null) {
@@ -103,6 +141,12 @@ public class IndividualService {
         individualExtendMapper.updateByPrimaryKeySelective(individual2Update);
     }
 
+    /**
+     * 获取个人详情.
+     *
+     * @param individualId
+     * @return Response
+     */
     public Response<IndividualDetail> getIndividualDetail(Integer individualId) {
         Individual individual = this.getIndividualById(individualId);
         if (individual == null) {
@@ -117,18 +161,36 @@ public class IndividualService {
         return new Response<>(detail);
     }
 
+    /**
+     * 获取个人关注de人数.
+     *
+     * @param individualId
+     * @return Integer
+     */
     public Integer getOnWatchIndividualCnt(Integer individualId) {
         MidIndividualIndividualExample example = new MidIndividualIndividualExample();
         example.or().andWatcherIdEqualTo(individualId).andStatusEqualTo(StatusEnum.VALID.getCode());
         return midIndividualIndividualExtendMapper.countByExample(example);
     }
 
+    /**
+     * 获取粉丝数.
+     *
+     * @param individualId
+     * @return Integer
+     */
     public Integer getFanCnt(Integer individualId) {
         MidIndividualIndividualExample example = new MidIndividualIndividualExample();
         example.or().andWatchedIdEqualTo(individualId).andStatusEqualTo(StatusEnum.VALID.getCode());
         return midIndividualIndividualExtendMapper.countByExample(example);
     }
 
+    /**
+     * 获取粉丝列表.
+     *
+     * @param individualId
+     * @return List
+     */
     public List<MidIndividualIndividual> getFans(Integer individualId) {
         MidIndividualIndividualExample example = new MidIndividualIndividualExample();
         example.or().andWatchedIdEqualTo(individualId).andStatusEqualTo(StatusEnum.VALID.getCode());
@@ -140,10 +202,22 @@ public class IndividualService {
     }
 
 
+    /**
+     * 获取粉丝详情列表.
+     *
+     * @param individualId
+     * @return List
+     */
     public List<Individual> getFanDetails(Integer individualId) {
         return individualExtendMapper.getFanDetails(individualId);
     }
 
+    /**
+     * 获取粉丝id列表.
+     *
+     * @param individualId
+     * @return List
+     */
     public List<Integer> getFansIds(Integer individualId) {
         return this.getFans(individualId).stream().map(MidIndividualIndividual::getWatchedId).collect(Collectors.toList());
     }
@@ -158,6 +232,15 @@ public class IndividualService {
         return midIndividualIndividuals.stream().map(MidIndividualIndividual::getWatchedId).collect(Collectors.toList());
     }
 
+    /**
+     * {@link Individual}
+     *
+     * =>
+     *
+     * {@link IndividualDetail}
+     *
+     * @return Converter
+     */
     public Converter<Individual, IndividualDetail> getConverter() {
         return new Converter<>(individual -> {
             IndividualDetail detail = new IndividualDetail();
@@ -174,6 +257,14 @@ public class IndividualService {
         });
     }
 
+    /**
+     * 关注个人操作.
+     *
+     * @param watchedId
+     * @param watcherId
+     * @param onWatch
+     * @return Response
+     */
     public Response<Object> watchIndividual(Integer watchedId, Integer watcherId, Boolean onWatch) {
         MidIndividualIndividualExample example = new MidIndividualIndividualExample();
         example.or().andWatchedIdEqualTo(watchedId).andWatcherIdEqualTo(watcherId);
@@ -193,16 +284,39 @@ public class IndividualService {
         return Response.SUCCESS;
     }
 
+
+    /**
+     * 获取关注个人详情列表.
+     *
+     * @param watcherId
+     * @param currentPage
+     * @param pageSize
+     * @return List
+     */
     public List<IndividualDetail> getOnWatchIndividualList(Integer watcherId, Integer currentPage, Integer pageSize) {
         Integer offset = (currentPage - 1 ) * pageSize;
         return this.getConverter().convert(Optional.ofNullable(individualExtendMapper.getOnWatchIndividualList(watcherId,offset,pageSize)).orElse(Collections.EMPTY_LIST));
     }
 
+    /**
+     * 获取粉丝详情列表.
+     *
+     * @param watchedId
+     * @param currentPage
+     * @param pageSize
+     * @return List
+     */
     public List<IndividualDetail> getFanList(Integer watchedId, Integer currentPage, Integer pageSize) {
         Integer offset = (currentPage - 1 ) * pageSize;
         return this.getConverter().convert(Optional.ofNullable(individualExtendMapper.getFanList(watchedId,offset,pageSize)).orElse(Collections.EMPTY_LIST));
     }
 
+    /**
+     * 激活账户.
+     *
+     * @param mailMd5Hash
+     * @return Response
+     */
     public Response<Individual> activeAccount(String mailMd5Hash) {
         IndividualExample example = new IndividualExample();
         example.or().andMailMd5HashEqualTo(mailMd5Hash);
